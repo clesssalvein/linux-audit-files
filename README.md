@@ -52,7 +52,8 @@ u1@chef ~ $ echo 2 > /opt/test123/1
 
 - You will see some debug in the service output
 
-```systemctl status audit-files.service```
+```
+systemctl status audit-files.service
 ```
 ...
 Feb 18 15:58:34 chef systemd[1]: Started script.
