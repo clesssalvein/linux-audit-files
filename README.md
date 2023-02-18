@@ -67,3 +67,5 @@ Feb 18 15:58:51 chef audit-files.sh[1825]: File action: MODIFY
 Feb 18 15:58:51 chef audit-files.sh[1825]: ---
 ...
 ```
+
+- Feel free to add any actions with gotten vars
