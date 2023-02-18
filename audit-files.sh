@@ -72,8 +72,8 @@ do
       # For example, you can send text using telegram bot
 
       # send text using telegram bot
-      curl --request POST https://api.telegram.org/bot4***1:A***Y/sendMessage?chat_id=2***3 \
-          --data "text=File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}";
+      #curl --request POST https://api.telegram.org/bot4***1:A***Y/sendMessage?chat_id=2***3 \
+      #    --data "text=File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}";
     done
 # infinite loop stop
 done
