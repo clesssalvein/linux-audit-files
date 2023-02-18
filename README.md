@@ -10,7 +10,9 @@ This service is intended to run some actions when file(s) in the certain directo
 
 - Create dir for service script
 
+```
 mkdir /opt/audit-files
+```
 
 - Create service script and put "audit-files.sh" file content in it.
 
@@ -44,11 +46,13 @@ systemctl enable --now audit-files.service
 # How it works
 
 - Create or modify some file in the monitoring directory as any user
+
 ```
 u1@chef ~ $ echo 2 > /opt/test123/1
 ```
 
 - You will see some debug in the service output
+
 ```systemctl status audit-files.service```
 ```
 ...
