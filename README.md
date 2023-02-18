@@ -70,6 +70,13 @@ Feb 18 15:58:51 chef audit-files.sh[1825]: ---
 ```
 
 - Feel free to add any actions with gotten vars to script "audit-files.sh"
+  *For example, you can send text using telegram bot
+  
+  ```
+  curl --request POST https://api.telegram.org/bot4***1:A***Y/sendMessage?chat_id=2***3 \
+    --data "text=File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}";
+  ```
+  
 - Restart service after adding actions
 
 ```
