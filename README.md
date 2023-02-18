@@ -14,20 +14,20 @@ This service is intended to run some actions when any file(s) in the certain dir
 mkdir /opt/audit-files
 ```
 
-- Create service script and put "audit-files.sh" file content in it.
+- Create service script and put the content of the file "audit-files.sh" into it.
 
 ```
 nano /opt/audit-files/audit-files.sh
 ```
 
-- Edit variables in script "audit-files.sh"
-- Add execute permission to script
+- Edit the variables in the script "audit-files.sh"
+- Add execution permission to script
 
 ```
 chmod +x /opt/audit-files/audit-files.sh
 ```
 
-- Create systemd service file and put "audit-files.service" file content in it.
+- Create systemd service file and put the content of the file "audit-files.service" into it.
 
 ```
 nano /etc/systemd/system/audit-files.service
