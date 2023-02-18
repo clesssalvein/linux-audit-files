@@ -21,7 +21,6 @@ nano /opt/audit-files/audit-files.sh
 ```
 
 - Edit variables in script "audit-files.sh"
-
 - Add execute permission to script
 
 ```
@@ -69,7 +68,7 @@ Feb 18 15:58:51 chef audit-files.sh[1825]: ---
 ```
 
 - Feel free to add any actions with gotten vars to script "audit-files.sh"
-- *You have to restart service after adding actions
+- Restart service after adding actions
 
 ```
 systemctl restart audit-files.service
