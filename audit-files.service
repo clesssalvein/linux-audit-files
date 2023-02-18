@@ -1,0 +1,14 @@
+[Unit]
+Description=script
+
+[Service]
+WorkingDirectory=/opt/audit-files
+ExecStart=/opt/audit-files/audit-files.sh &
+Type=simple
+User=root
+Group=root
+Restart=on-failure
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target
