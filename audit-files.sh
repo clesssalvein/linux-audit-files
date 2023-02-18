@@ -57,10 +57,10 @@ do
 
       # get dateTime when file has been modified
       dateTime=$(date --date="$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
-      | awk -v RS='----' -v i=$fileModedFullPathScreenedSlashes '/i/ {print}' \
-      | awk -v RS='' 'END {print}' \
-      | awk -F"->" '/time->/ {print $2}')" \
-      +%Y-%m-%d_%H-%M-%S);
+        | awk -v RS='----' -v i=$fileModedFullPathScreenedSlashes '/i/ {print}' \
+        | awk -v RS='' 'END {print}' \
+        | awk -F"->" '/time->/ {print $2}')" \
+        +%Y-%m-%d_%H-%M-%S);
 
       # get username, which moded the file
       userName=`id -nu ${userId}`;
