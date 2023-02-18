@@ -48,18 +48,26 @@ do
 
       # search for the latest record in auditd log with our custom marker,
       # get user id, which moded the file
-      userId=`ausearch -k ${auditMarker} -if ${auditLogFilePath} \
+      userId=$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
         | awk -v RS='----' -v i=$fileModedFullPathScreenedSlashes '/i/ {print}' \
         | awk -v RS='' 'END {print}' \
         | grep "SYSCALL" \
         | awk '{print $15}' \
-        | awk -F"=" '{print $2}'`;
+        | awk -F"=" '{print $2}');
+
+      # get dateTime when file has been modified
+      dateTime=$(date --date="$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
+      | awk -v RS='----' -v i=$fileModedFullPathScreenedSlashes '/i/ {print}' \
+      | awk -v RS='' 'END {print}' \
+      | awk -F"->" '/time->/ {print $2}')" \
+      +%Y-%m-%d_%H-%M-%S);
 
       # get username, which moded the file
       userName=`id -nu ${userId}`;
 
       # debug
       echo "---";
+      echo "DateTime: ${dateTime}";
       echo "dirPathFileModed: ${dirPathFileModed}";
       echo "fileModed: ${fileModed}";
       echo "fileModedFullPath ${fileModedFullPath}";
@@ -73,7 +81,8 @@ do
 
       # send text using telegram bot
       #curl --request POST https://api.telegram.org/bot4***1:A***Y/sendMessage?chat_id=2***3 \
-      #    --data "text=File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}";
+      #    --data "text=DateTime: ${dateTime}, File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}";
+
     done
 # infinite loop stop
 done
