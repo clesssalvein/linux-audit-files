@@ -1,6 +1,6 @@
 # Description
 
-This service is intended to run some actions when file(s) in the certain directory are modified.
+This service is intended to run some actions when any file(s) in the certain directory are modified.
 
 # Requirements
 
