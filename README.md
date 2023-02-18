@@ -55,6 +55,7 @@ u1@chef ~ $ echo 2 > /opt/test123/1
 ```
 systemctl status audit-files.service
 ```
+```
 ...
 Feb 18 15:58:34 chef systemd[1]: Started script.
 Feb 18 15:58:51 chef audit-files.sh[1825]: ---
