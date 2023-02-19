@@ -1,12 +1,18 @@
 # Description
 
-This service is intended to run some actions when any file(s) in the certain directory are modified.
+This service is intended to run some actions when any file(s) in the certain directory are modified. It uses *auditd* service and *inotify-tools*.
 
 # Requirements
 
 - Tested on AlmaLinux 8
 
 # Installation
+
+- Install required components
+
+```
+dnf install inotify-tools libnotify
+```
 
 - Create dir for the service script
 
