@@ -77,6 +77,11 @@ do
       echo "---";
 
       # Here you can add arbitrary actions with gotten vars
+      
+      # For example, you can write log
+
+      echo "DateTime: ${dateTime}, File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}" >> /opt/audit-files/audit-files.log
+      
       # For example, you can send text using telegram bot
 
       # send text using telegram bot
