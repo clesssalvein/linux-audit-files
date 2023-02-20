@@ -10,7 +10,7 @@
 
 # VARS
 
-# monitoring directory path
+# monitoring directory path (!!! the path must be without spaces in the directory names !!!)
 auditDirPath="/opt/test123"
 
 # auditd log marker
@@ -36,31 +36,49 @@ auditctl -w ${auditDirPath} -p w -k ${auditMarker}
 # infinite loop start
 while true;
 do
-  # inotify wait for file modification
-  inotifywait -rq ${auditDirPath} -e modify |
-    while read dirPathFileModed fileAction fileModed;
+  # separator ";" between dirPath, file, action
+  IFS=';'
+  # inotify wait for any file modification
+  # output format: dirPath;file;action ( e.g.: /dirpath/;file.txt;MODIFY )
+  inotifywait -rq ${auditDirPath} --format '%w;%f;%:e' -e modify |
+    while read "dirPathFileModed" "fileModed" "fileAction";
     do
+      # debug
+      echo "///";
+      echo "dirPathFileModed: ${dirPathFileModed}";
+      echo "fileAction: ${fileAction}";
+      echo "fileModed: ${fileModed}";
+      echo "///";
+
       # get modded file full path
       fileModedFullPath="${dirPathFileModed}${fileModed}";
 
-      # screening slashes in the moded file path for awk
-      fileModedFullPathScreenedSlashes=`echo ${fileModedFullPath} | sed -e 's:\/:\!:g'`
+      # get inode of the moded file
+      fileModedInode=$(ls -i "${fileModedFullPath}" | awk '{print $1}')
 
-      # search for the latest record in auditd log with our custom marker,
-      # get user id, which moded the file
+      # debug
+      echo "///";
+      echo "fileModedFullPath: ${fileModedFullPath}";
+      echo "fileModedInode: ${fileModedInode}";
+      echo "///";
+
+      # searching for auditd log block with the latest record
+      # with our custom auditd marker AND inode of the fileModed,
+      # get user id ( uid=X ), which moded the file
       userId=$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
-        | awk -v RS='----' -v i=$fileModedFullPathScreenedSlashes '/i/ {print}' \
+        | awk -v RS='----' -v i="inode=$fileModedInode" '$0~i {print}' \
         | awk -v RS='' 'END {print}' \
         | grep "SYSCALL" \
-        | awk '{print $15}' \
-        | awk -F"=" '{print $2}');
+        | awk '{sub(/.* uid=/,X,$0);sub(/ .*/,X,$0);print}');
 
-      # get dateTime when file has been modified
-      dateTime=$(date --date="$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
-        | awk -v RS='----' -v i=$fileModedFullPathScreenedSlashes '/i/ {print}' \
-        | awk -v RS='' 'END {print}' \
-        | awk -F"->" '/time->/ {print $2}')" \
-        +%Y-%m-%d_%H-%M-%S);
+      # get dateTime when file has been modified in auditd standard format
+      dateTimeAuditFormat=$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
+      | awk -v RS='----' -v i="inode=$fileModedInode" '$0~i {print}' \
+      | awk -v RS='' 'END {print}' \
+      | awk -F"->" '/time->/ {print $2}');
+
+      # convert dateTime to custom human format
+      dateTime=$(date --date="$dateTimeAuditFormat" +%Y-%m-%d_%H-%M-%S);
 
       # get username, which moded the file
       userName=`id -nu ${userId}`;
@@ -77,11 +95,10 @@ do
       echo "---";
 
       # Here you can add arbitrary actions with gotten vars
-      
-      # For example, you can write log
 
+      # For example, you can write log
       echo "DateTime: ${dateTime}, File: ${fileModedFullPath}, File action: ${fileAction}, Username: ${userName}" >> /opt/audit-files/audit-files.log
-      
+
       # For example, you can send text using telegram bot
 
       # send text using telegram bot
