@@ -10,7 +10,7 @@
 
 # VARS
 
-# monitoring directory path (!!! the path must be without spaces in the directory names !!!)
+# monitoring directory path (!!! the path must not contain spaces in the directory names !!!)
 auditDirPath="/opt/test123"
 
 # auditd log marker
@@ -23,11 +23,11 @@ auditLogFilePath="/var/log/audit/audit.log"
 # START SCRIPT
 
 # flush auditd rules
-auditctl -W ${auditDirPath} -p w -k ${auditMarker}
+auditctl -W "${auditDirPath}" -p w -k "${auditMarker}"
 
 # add auditd rules
 #auditctl ${auditDirRecursiveCheckKey} ${auditDirPath} -p w -k ${auditMarker}
-auditctl -w ${auditDirPath} -p w -k ${auditMarker}
+auditctl -w "${auditDirPath}" -p w -k "${auditMarker}"
 
 # write audit rule to file (unnecessary)
 ###auditctl -l > /etc/audit/rules.d/${auditMarker}.rules
@@ -40,7 +40,7 @@ do
   IFS=';'
   # inotify wait for any file modification
   # output format: dirPath;file;action ( e.g.: /dirpath/;file.txt;MODIFY )
-  inotifywait -rq ${auditDirPath} --format '%w;%f;%:e' -e modify |
+  inotifywait -rq "${auditDirPath}" --format '%w;%f;%:e' -e modify |
     while read "dirPathFileModed" "fileModed" "fileAction";
     do
       # debug
