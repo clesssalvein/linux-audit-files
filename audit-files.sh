@@ -73,9 +73,9 @@ do
 
       # get dateTime when file has been modified in auditd standard format
       dateTimeAuditFormat=$(ausearch -k ${auditMarker} -if ${auditLogFilePath} \
-      | awk -v RS='----' -v i="inode=$fileModedInode" '$0~i {print}' \
-      | awk -v RS='' 'END {print}' \
-      | awk -F"->" '/time->/ {print $2}');
+        | awk -v RS='----' -v i="inode=$fileModedInode" '$0~i {print}' \
+        | awk -v RS='' 'END {print}' \
+        | awk -F"->" '/time->/ {print $2}');
 
       # convert dateTime to custom human format
       dateTime=$(date --date="$dateTimeAuditFormat" +%Y-%m-%d_%H-%M-%S);
